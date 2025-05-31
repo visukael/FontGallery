@@ -1,0 +1,161 @@
+/* style.css */
+
+/* Transisi untuk semua form controls */
+input[type="range"],
+input[type="color"],
+select,
+input[type="text"] {
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+input:focus,
+select:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5); /* Tailwind blue-500 @50% */
+  border-color: #3b82f6; /* blue-500 */
+}
+
+/* Spacing ekstra di container tombol */
+nav button {
+  margin-left: 0.5rem;
+}
+
+/* Sedikit line-height agar teks lebih “bernapas” */
+.font-preview {
+  line-height: 1.2;
+}
+
+/* Mobile tweaks: stack controls dan beri gap */
+@media (max-width: 768px) {
+  .flex-wrap {
+    display: grid !important;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+/* Glyph Explorer */
+.glyph-section {
+  margin-bottom: 2rem;
+}
+
+.glyph-section h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #a1a1aa;
+}
+
+.glyph-options {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.glyph-option {
+  padding: 0.5rem 1rem;
+  background: #1e1e1e;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.glyph-option:hover {
+  background: #2e2e2e;
+}
+
+.glyph-option.selected {
+  background: #3b82f6;
+  color: white;
+}
+
+.glyph-grid {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.glyph-item {
+  font-size: 1.5rem;
+  padding: 1rem;
+  background: #1e1e1e;
+  border-radius: 0.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.glyph-item:hover {
+  background: #2e2e2e;
+}
+
+.glyph-item.selected {
+  background: #3b82f6;
+  color: white;
+}
+
+.glyph-preview {
+  font-size: 5rem;
+  text-align: center;
+  margin: 2rem 0;
+  min-height: 6rem;
+}
+
+.glyph-info {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  color: #a1a1aa;
+}
+
+/* Glyph Style Variations */
+.solid-style {
+  /* Gaya untuk solid */
+  text-shadow: none;
+  color: #fdf6e3;
+  font-variation-settings: "FILL" 1;
+}
+
+.outline-style {
+  /* Gaya untuk outline */
+  color: transparent;
+  -webkit-text-stroke: 2px #fdf6e3;
+  text-shadow: none;
+  font-variation-settings: "FILL" 0;
+}
+
+.u1-style {
+  /* Gaya khusus untuk U1:0:39 */
+  font-variation-settings: "wght" 400, "wdth" 85;
+  color: #fdf6e3;
+  text-shadow: 0 0 5px rgba(253, 246, 227, 0.5);
+}
+
+.light-style {
+  font-weight: 300;
+  color: #fdf6e3;
+}
+
+.regular-style {
+  font-weight: 400;
+  color: #fdf6e3;
+}
+
+.semibold-style {
+  font-weight: 600;
+  color: #fdf6e3;
+}
+
+.solid-build-style {
+  font-weight: 700;
+  color: #c99b1e;
+  text-shadow: 0 0 2px rgba(253, 246, 227, 0.8);
+}
+
+/* Spesifikasi Font */
+#fontSpecs dd {
+  margin-top: 0.25rem;
+}
+
+

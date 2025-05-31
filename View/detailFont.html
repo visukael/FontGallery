@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Font Detail</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .font-preview {
+      font-size: 5rem;
+      line-height: 1;
+    }
+    @media (max-width: 768px) {
+      .font-preview {
+        font-size: 3rem;
+      }
+    }
+  </style>
+</head>
+<body class="bg-black text-white font-sans">
+  <!-- Header -->
+  <nav class="flex justify-between items-center px-8 py-6 border-b border-neutral-800">
+    <div class="flex items-center gap-8">
+      <a href="index.html" class="text-3xl font-semibold">FG</a>
+      <div class="flex gap-4">
+        <a href="index.html" class="text-neutral-400 hover:text-white transition">Back to Library</a>
+      </div>
+    </div>
+    <button id="adminButton" class="bg-white text-black px-4 py-2 rounded hover:bg-neutral-200 transition hidden">Admin</button>
+    
+  </nav>
+
+  <!-- Main Content -->
+  <main class="px-8 py-12 max-w-6xl mx-auto">
+    <!-- Font Header -->
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-12">
+      <div>
+        <h1 class="text-5xl font-bold mb-2" id="fontName">Font Name</h1>
+        <div class="flex gap-4 text-neutral-400">
+          <span id="fontCategory">Display</span>
+          <span>•</span>
+          <span id="fontStyles">1 Style</span>
+          <span>•</span>
+          <span id="fontLicense">SIL Open Font License</span>
+        </div>
+      </div>
+      <div class="flex gap-3">
+        <button id="downloadButton" class="flex items-center gap-2 bg-white text-black px-6 py-3 rounded-lg hover:bg-neutral-200 focus:ring-2 focus:ring-offset-1 focus:ring-blue-400 transition"> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1M12 12v8m0 0l-3-3m3 3l3-3" /> </svg>Download</button>
+        <button id="editButton" class="flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 focus:ring-2 focus:ring-offset-1 focus:ring-blue-300 transition hidden"> <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v12a2 2 0 002 2h12a2 2 0 002-2v-5M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/> </svg>Edit Font</button>
+      </div>
+    </div>
+
+    <!-- Font Preview -->
+    <div class="bg-[#121212] rounded-2xl p-8 mb-12">
+      <div class="font-preview mb-8 transition-all duration-200 ease-out focus:outline-none" id="mainPreview" contenteditable="true" aria-label="Font preview text">
+        Almost before we knew it, we had left the ground.
+      </div>
+      <div class="flex flex-wrap gap-4">
+        <input type="range" id="sizeSlider" min="12" max="120" value="80" class="w-full md:w-1/3">
+        <input type="color" id="colorPicker" value="#fdf6e3" class="w-20 h-10">
+        <select id="textAlign" class="bg-[#222222] text-white p-2 rounded">
+          <option value="left">Left</option>
+          <option value="center">Center</option>
+          <option value="right">Right</option>
+        </select>
+        <input type="text" id="customText" placeholder="Type your text..." class="flex-grow bg-[#222222] text-white p-2 rounded">
+        <!-- Letter-spacing -->
+        <div class="w-full md:w-1/3">
+          <label for="letterSpacing" class="block text-neutral-400 mb-1">
+            Spasi Huruf: <span id="letterSpacingValue">0</span>px
+          </label>
+          <input type="range" id="letterSpacing" min="-5" max="20" value="0" class="w-full">
+        </div>
+
+        <!-- Line-height -->
+        <div class="w-full md:w-1/3">
+          <label for="lineHeight" class="block text-neutral-400 mb-1">
+            Spasi Baris: <span id="lineHeightValue">1.2</span>
+          </label>
+          <input type="range" id="lineHeight" min="1" max="3" step="0.1" value="1.2" class="w-full">
+        </div>
+
+        <!-- Preset Sample Text -->
+        <select id="sampleText"
+        class="bg-[#222222] text-white p-2 rounded w-full md:w-auto">
+        <option value="">Pilih Contoh…</option>
+        <option value="The quick brown fox jumps over the lazy dog.">Quick fox</option>
+        <option value="1234567890 !@#$%^&*()_+">Angka & simbol</option>
+        <option value="Lorem ipsum dolor sit amet, consectetur.">Lorem ipsum</option>
+        </select>
+
+        <!-- Copy CSS -->
+        <button id="copyCss"
+        class="ml-2 bg-green-500 px-3 py-1 rounded text-sm hover:bg-green-600 transition">
+        Copy CSS
+        </button>
+
+        <!-- Preview Mode -->
+        <select id="previewMode"
+        class="bg-[#222222] text-white p-2 rounded w-full md:w-auto">
+        <option value="heading">Heading</option>
+        <option value="body">Body Text</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Font Styles -->
+    <div class="mb-12">
+      <h2 class="text-2xl font-bold mb-6">Styles</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="stylesContainer">
+        <!-- Styles will be added here dynamically -->
+      </div>
+    </div>
+
+    <!-- Glyph Explorer -->
+    <section id="glyphExplorer" class="mb-12">
+      <h2 class="text-2xl font-bold mb-6">415 Glyphs</h2>
+      
+      <!-- Glyph Preview -->
+      <div class="glyph-preview bg-[#121212] rounded-2xl p-8 flex items-center justify-center mb-8" id="glyphPreview">
+        <span>Click a glyph</span>
+      </div>
+      
+      <!-- Glyph Info -->
+      <div class="glyph-info">
+        <span id="glyphName">glyph selected</span>
+        <span id="glyphCode"></span>
+      </div>
+      
+      <!-- Weight Options -->
+      <div class="flex gap-4 mb-6">
+        <select id="weightSelect" class="bg-[#222222] text-white p-2 rounded">
+          <option value="200">Light</option>
+          <option value="400" selected>Regular</option>
+          <option value="700">Bold</option>
+        </select>
+        <select id="styleSelect" class="bg-[#222222] text-white p-2 rounded">
+          <option value="normal">Normal</option>
+          <option value="italic">Italic</option>
+        </select>
+      </div>
+      
+      <!-- Digit Rate Section -->
+      <div class="glyph-section">
+        <h3>Digit Rate</h3>
+        <div class="glyph-options">
+          <div class="glyph-option" data-style="u1">U1:0:39</div>
+          <div class="glyph-option" data-style="solid">Solid</div>
+          <div class="glyph-option" data-style="outline">Outline</div>
+        </div>
+      </div>
+      
+      <!-- Opencase Section -->
+      <div class="glyph-section">
+        <h3>Uppercase</h3>
+        <div class="glyph-grid">
+          <div class="glyph-item">A</div>
+          <div class="glyph-item">B</div>
+          <div class="glyph-item">C</div>
+          <div class="glyph-item">D</div>
+          <div class="glyph-item">E</div>
+          <div class="glyph-item">F</div>
+          <div class="glyph-item">G</div>
+          <div class="glyph-item">H</div>
+          <div class="glyph-item">I</div>
+          <div class="glyph-item">J</div>
+          <div class="glyph-item">K</div>
+          <div class="glyph-item">L</div>
+          <div class="glyph-item">M</div>
+          <div class="glyph-item">N</div>
+          <div class="glyph-item">O</div>
+          <div class="glyph-item">P</div>
+          <div class="glyph-item">Q</div>
+          <div class="glyph-item">R</div>
+          <div class="glyph-item">S</div>
+          <div class="glyph-item">T</div>
+          <div class="glyph-item">U</div>
+          <div class="glyph-item">V</div>
+          <div class="glyph-item">W</div>
+          <div class="glyph-item">X</div>
+          <div class="glyph-item">Y</div>
+          <div class="glyph-item">Z</div>
+        </div>
+      </div>
+      
+      <!-- Lowercase Section -->
+      <div class="glyph-section">
+        <h3>Lowercase</h3>
+        <div class="glyph-grid">
+          <div class="glyph-item">a</div>
+          <div class="glyph-item">b</div>
+          <div class="glyph-item">c</div>
+          <div class="glyph-item">d</div>
+          <div class="glyph-item">e</div>
+          <div class="glyph-item">f</div>
+          <div class="glyph-item">g</div>
+          <div class="glyph-item">h</div>
+          <div class="glyph-item">i</div>
+          <div class="glyph-item">j</div>
+          <div class="glyph-item">k</div>
+          <div class="glyph-item">l</div>
+          <div class="glyph-item">m</div>
+          <div class="glyph-item">n</div>
+          <div class="glyph-item">o</div>
+          <div class="glyph-item">p</div>
+          <div class="glyph-item">q</div>
+          <div class="glyph-item">r</div>
+          <div class="glyph-item">s</div>
+          <div class="glyph-item">t</div>
+          <div class="glyph-item">u</div>
+          <div class="glyph-item">v</div>
+          <div class="glyph-item">w</div>
+          <div class="glyph-item">x</div>
+          <div class="glyph-item">y</div>
+          <div class="glyph-item">z</div>
+        </div>
+      </div>
+      
+      <!-- Numbers Section -->
+      <div class="glyph-section">
+        <h3>Numbers</h3>
+        <div class="glyph-grid">
+          <div class="glyph-item">0</div>
+          <div class="glyph-item">1</div>
+          <div class="glyph-item">2</div>
+          <div class="glyph-item">3</div>
+          <div class="glyph-item">4</div>
+          <div class="glyph-item">5</div>
+          <div class="glyph-item">6</div>
+          <div class="glyph-item">7</div>
+          <div class="glyph-item">8</div>
+          <div class="glyph-item">9</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Font Details -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+      <div>
+        <h2 class="text-2xl font-bold mb-6">About this Font</h2>
+        <div class="prose prose-invert text-neutral-300">
+          <p id="fontDescription">This is a description of the font. It might include information about the designer, the inspiration behind the font, or technical details about its construction.</p>
+          <div class="mt-6 space-y-2">
+            <p><strong>Designer:</strong> <span id="fontDesigner">Unknown</span></p>
+            <p><strong>Release Date:</strong> <span id="fontRelease">2023</span></p>
+            <p><strong>Version:</strong> <span id="fontVersion">1.0</span></p>
+          </div>
+        </div>
+      </div>
+      <div>
+        <h2 class="text-2xl font-bold mb-6">License Information</h2>
+        <div class="bg-[#121212] rounded-2xl p-6">
+          <div class="prose prose-invert text-neutral-300">
+            <p id="licenseDetails">This font is licensed under the SIL Open Font License, Version 1.1. This license is available with a FAQ at: http://scripts.sil.org/OFL</p>
+            <div class="mt-6">
+              <a href="#" class="text-blue-400 hover:underline">View full license</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Spesifikasi Font -->
+    <section id="fontSpecs" class="mb-12 bg-[#121212] rounded-2xl p-6">
+      <h2 class="text-2xl font-bold mb-4">Spesifikasi Font</h2>
+      <dl class="grid grid-cols-1 md:grid-cols-2 gap-4 text-neutral-300">
+        <div>
+          <dt class="font-medium">Kategori</dt>
+          <dd id="specCategory">–</dd>
+        </div>
+        <div>
+          <dt class="font-medium">Jumlah Style</dt>
+          <dd id="specStyles">–</dd>
+        </div>
+        <div>
+          <dt class="font-medium">Lisensi</dt>
+          <dd id="specLicense">–</dd>
+        </div>
+        <div>
+          <dt class="font-medium">Designer</dt>
+          <dd id="specDesigner">–</dd>
+        </div>
+        <div>
+          <dt class="font-medium">Release Date</dt>
+          <dd id="specRelease">–</dd>
+        </div>
+        <div>
+          <dt class="font-medium">Version</dt>
+          <dd id="specVersion">–</dd>
+        </div>
+      </dl>
+    </section>
+  </main>
+
+  <!-- Edit Font Modal -->
+  <div id="editFontModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center hidden">
+    <div class="bg-[#121212] rounded-lg p-6 w-96">
+      <h2 class="text-2xl font-medium mb-4">Edit Font</h2>
+      <form id="editFontForm">
+        <div class="mb-4">
+          <label for="editFontName" class="block text-sm">Font Name</label>
+          <input type="text" id="editFontName" name="editFontName" class="w-full p-2 bg-[#222222] text-white rounded mt-1" required />
+        </div>
+        <div class="mb-4">
+          <label for="editFontCategory" class="block text-sm">Category</label>
+          <select id="editFontCategory" name="editFontCategory" class="w-full p-2 bg-[#222222] text-white rounded mt-1" required>
+            <option value="Display">Display</option>
+            <option value="Serif">Serif</option>
+            <option value="Sans Serif">Sans Serif</option>
+          </select>
+        </div>
+        <div class="mb-4">
+          <label for="editFontLicense" class="block text-sm">License</label>
+          <input type="text" id="editFontLicense" name="editFontLicense" class="w-full p-2 bg-[#222222] text-white rounded mt-1" required />
+        </div>
+        <div class="mb-4">
+          <label for="editFontDescription" class="block text-sm">Description</label>
+          <textarea id="editFontDescription" name="editFontDescription" class="w-full p-2 bg-[#222222] text-white rounded mt-1" rows="3"></textarea>
+        </div>
+        <div class="flex justify-between">
+          <button type="button" id="deleteFont" class="bg-red-600 px-4 py-2 rounded hover:bg-red-700 transition">Delete Font</button>
+          <div>
+            <button type="button" id="cancelEdit" class="bg-neutral-600 px-4 py-2 rounded hover:bg-neutral-700 transition">Cancel</button>
+            <button type="submit" class="bg-green-600 px-4 py-2 rounded ml-2 hover:bg-green-700 transition">Save Changes</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  
+
+  <!-- Footer -->
+  <footer class="bg-black text-white border-t border-neutral-800 px-8 py-12 grid grid-cols-1 md:grid-cols-3 gap-8 text-sm">
+    <div>
+      <h1 class="text-6xl font-semibold mb-4">FG</h1>
+      <p class="text-neutral-400">This website was developed as part of the learning process and final assessment for the Web Programming course.</p>
+    </div>
+    <div>
+      <h2 class="text-neutral-300 mb-2 font-medium">All typefaces</h2>
+      <ul class="space-y-1 text-neutral-400">
+        <li>Cursive</li>
+        <li>Display</li>
+        <li>Monospace</li>
+        <li>Sans Serif</li>
+        <li>Serif</li>
+        <li>Slab</li>
+      </ul>
+    </div>
+    <div>
+      <p class="text-neutral-400">Website by <span class="text-white">Team Mekel</span></p>
+      <p class="text-neutral-400">Based in <span class="text-white">Yogyakarta</span></p>
+      <p class="text-white mt-2">Contact</p>
+    </div>
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>

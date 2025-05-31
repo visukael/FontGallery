@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add New Font</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-[#0a0a0a] text-white font-sans">
+
+    <!-- Header -->
+    <nav class="flex justify-between items-center px-8 py-6 border-b border-neutral-800">
+      <div class="flex items-center gap-8">
+        <a href="index.html" class="text-3xl font-semibold">FG</a>
+        <div class="flex gap-4">
+          <a href="index.html" class="text-neutral-400 hover:text-white transition">Back to Library</a>
+        </div>
+      </div>
+      <button id="adminButton" class="bg-white text-black px-4 py-2 rounded hover:bg-neutral-200 transition hidden">Admin</button>
+    </nav>
+
+    <!-- Form Section -->
+    <main class="max-w-2xl mx-auto px-6 py-12">
+      <h1 class="text-3xl font-semibold mb-8">Add New Font</h1>
+
+      <form action="addFont.php" method="POST" enctype="multipart/form-data" class="space-y-6">
+
+        <!-- Font Name -->
+        <div>
+          <label for="fontName" class="block text-sm font-medium text-neutral-300 mb-1">Font Name</label>
+          <input type="text" id="fontName" name="fontName" required
+            class="w-full bg-neutral-900 border border-neutral-700 text-white rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white" />
+        </div>
+
+        <!-- Category Select -->
+        <div>
+          <label for="category" class="block text-sm font-medium text-neutral-300 mb-1">Category</label>
+          <select id="category" name="category"
+            class="w-full bg-neutral-900 border border-neutral-700 text-white rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white"
+            onchange="toggleNewCategoryInput(this)">
+            <option value="">Select category</option>
+            <option value="Serif">Serif</option>
+            <option value="Sans Serif">Sans Serif</option>
+            <option value="Display">Display</option>
+            <option value="Monospace">Monospace</option>
+            <option value="custom">+ Add New Category</option>
+          </select>
+        </div>
+
+        <!-- New Category Input -->
+        <div id="newCategoryWrapper" class="mt-4 hidden">
+          <label for="newCategory" class="block text-sm font-medium text-neutral-300 mb-1">New Category Name</label>
+          <input type="text" id="newCategory" name="newCategory"
+            class="w-full bg-neutral-900 border border-neutral-700 text-white rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white" />
+        </div>
+
+        <!-- Description -->
+        <div>
+          <label for="description" class="block text-sm font-medium text-neutral-300 mb-1">Description</label>
+          <textarea id="description" name="description" rows="4"
+            class="w-full bg-neutral-900 border border-neutral-700 text-white rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white"></textarea>
+        </div>
+
+        <!-- Font Link -->
+        <div>
+          <label for="fontLink" class="block text-sm font-medium text-neutral-300 mb-1">Font Link</label>
+          <input type="url" id="fontLink" name="fontLink"
+            class="w-full bg-neutral-900 border border-neutral-700 text-white rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white"
+            placeholder="https://..." />
+        </div>
+
+        <!-- Designer Name -->
+        <div>
+          <label for="designer" class="block text-sm font-medium text-neutral-300 mb-1">Designer</label>
+          <input type="text" id="designer" name="designer"
+            class="w-full bg-neutral-900 border border-neutral-700 text-white rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white"
+            placeholder="John Doe" />
+        </div>
+
+        <!-- License Type -->
+        <div>
+          <label for="license" class="block text-sm font-medium text-neutral-300 mb-1">License</label>
+          <input type="text" id="license" name="license"
+            class="w-full bg-neutral-900 border border-neutral-700 text-white rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white"
+            placeholder="SIL Open Font, Free for Personal Use, etc." />
+        </div>
+
+        <!-- Font File -->
+        <div>
+          <label for="fontFile" class="block text-sm font-medium text-neutral-300 mb-1">Font File ( for preview )</label>
+          <input type="file" id="fontFile" name="fontFile" accept=".ttf,.otf,.woff,.woff2" required
+            class="w-full bg-neutral-900 border border-neutral-700 text-white rounded-xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-white file:text-white file:bg-neutral-700 file:border-0 file:px-4 file:py-2 file:rounded file:mr-4 file:hover:bg-neutral-600" />
+        </div>
+
+        <!-- Submit Button -->
+        <div class="pt-6">
+          <button type="submit"
+            class="bg-white text-black px-6 py-2 rounded-xl hover:bg-neutral-200 transition">Complete</button>
+        </div>
+      </form>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-neutral-800 mt-12 py-6 text-center text-sm text-neutral-500">
+      &copy; 2025 Font Library
+    </footer>
+
+    <!-- Script -->
+    <script>
+      function toggleNewCategoryInput(selectEl) {
+        const wrapper = document.getElementById('newCategoryWrapper');
+        const input = document.getElementById('newCategory');
+        if (selectEl.value === 'custom') {
+          wrapper.classList.remove('hidden');
+          input.required = true;
+        } else {
+          wrapper.classList.add('hidden');
+          input.required = false;
+          input.value = '';
+        }
+      }
+    </script>
+
+  </body>
+</html>
