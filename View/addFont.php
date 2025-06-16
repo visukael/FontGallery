@@ -91,22 +91,53 @@ if ($isEdit) {
             <option value="__add__">+ Add New Category</option>
           </select>
           <input type="text" id="newCategoryInput" name="category_combined"
-            class="mt-3 hidden w-full bg-neutral-900 border border-neutral-700 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            class="mt-3 hidden w-full bg-neutral-900 border border-neutral-700 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 capitalize"
             placeholder="New category name" />
         </div>
 
         <!-- Style -->
         <div>
           <label class="text-sm block mb-1">Style</label>
-          <input type="text" name="style" value="<?= $fontData['style'] ?? 'Regular' ?>"
-            class="w-full bg-neutral-900 border border-neutral-700 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+          <select name="style" required
+            class="w-full bg-neutral-900 border border-neutral-700 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <?php
+            $styles = ['Regular', 'Bold', 'Italic', 'Light', 'Medium', 'SemiBold', 'ExtraBold', 'Black', 'Thin', 'Condensed'];
+            $selectedStyle = $fontData['style'] ?? 'Regular';
+
+            foreach ($styles as $styleOption):
+              $selected = ($styleOption === $selectedStyle) ? 'selected' : '';
+            ?>
+              <option value="<?= $styleOption ?>" <?= $selected ?>><?= $styleOption ?></option>
+            <?php endforeach; ?>
+          </select>
         </div>
 
         <!-- License -->
         <div>
           <label class="text-sm block mb-1">License</label>
-          <input type="text" name="license" value="<?= $fontData['license'] ?? '' ?>"
-            class="w-full bg-neutral-900 border border-neutral-700 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+          <select name="license" required
+            class="w-full bg-neutral-900 border border-neutral-700 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <?php
+            $licenses = [
+              'Free for Personal Use',
+              'Commercial Use / Paid License',
+              'Free for Commercial Use',
+              'Open Source License',
+              'Desktop License',
+              'Webfont License',
+              'App License',
+              'E-pub License',
+              'Server License',
+              'Custom / Enterprise License'
+            ];
+            $selectedLicense = $fontData['license'] ?? '';
+
+            foreach ($licenses as $licenseOption):
+              $selected = ($licenseOption === $selectedLicense) ? 'selected' : '';
+            ?>
+              <option value="<?= $licenseOption ?>" <?= $selected ?>><?= $licenseOption ?></option>
+            <?php endforeach; ?>
+          </select>
         </div>
 
         <!-- Description -->
@@ -116,20 +147,25 @@ if ($isEdit) {
             class="w-full bg-neutral-900 border border-neutral-700 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"><?= $fontData['description'] ?? '' ?></textarea>
         </div>
 
-        <!-- Upload Fields (Add Only) -->
-        <?php if (!$isEdit): ?>
-          <div>
-            <label class="text-sm block mb-1">Preview Font File <span class="text-neutral-400">(TTF, OTF, etc)</span></label>
-            <input type="file" name="previewFontFile" accept=".ttf,.otf,.woff,.woff2" required
-              class="w-full bg-neutral-900 border border-neutral-700 px-4 py-2 rounded-lg file:bg-neutral-800 file:border-0 file:px-4 file:py-2 file:text-white file:rounded-md hover:file:bg-neutral-700 transition" />
-          </div>
+        <!-- Upload Fields -->
+        <div>
+          <label class="text-sm block mb-1">Preview Font File <span class="text-neutral-400">(TTF, OTF, dll)</span></label>
+          <input type="file" name="previewFontFile" accept=".ttf,.otf,.woff,.woff2"
+            class="w-full bg-neutral-900 border border-neutral-700 px-4 py-2 rounded-lg file:bg-neutral-800 file:border-0 file:px-4 file:py-2 file:text-white file:rounded-md hover:file:bg-neutral-700 transition" />
+          <?php if ($isEdit && !empty($fontData['preview_path'])): ?>
+            <p class="text-xs text-neutral-400 mt-1">Current: <?= basename($fontData['preview_path']) ?></p>
+          <?php endif; ?>
+        </div>
 
-          <div>
-            <label class="text-sm block mb-1">Downloadable ZIP File</label>
-            <input type="file" name="fontFile" accept=".zip" required
-              class="w-full bg-neutral-900 border border-neutral-700 px-4 py-2 rounded-lg file:bg-neutral-800 file:border-0 file:px-4 file:py-2 file:text-white file:rounded-md hover:file:bg-neutral-700 transition" />
-          </div>
-        <?php endif; ?>
+        <div>
+          <label class="text-sm block mb-1">Downloadable ZIP File</label>
+          <input type="file" name="fontFile" accept=".zip"
+            class="w-full bg-neutral-900 border border-neutral-700 px-4 py-2 rounded-lg file:bg-neutral-800 file:border-0 file:px-4 file:py-2 file:text-white file:rounded-md hover:file:bg-neutral-700 transition" />
+          <?php if ($isEdit && !empty($fontData['zip_path'])): ?>
+            <p class="text-xs text-neutral-400 mt-1">Current: <?= basename($fontData['zip_path']) ?></p>
+          <?php endif; ?>
+        </div>
+
 
         <!-- Submit -->
         <div class="pt-6 flex flex-col text-center">

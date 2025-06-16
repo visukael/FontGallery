@@ -97,6 +97,10 @@ $adminFonts = $conn->query("SELECT COUNT(*) FROM fonts f JOIN users u ON f.uploa
           <i data-lucide="settings" class="w-4 h-4"></i>
           <span class="sidebar-text">Settings</span>
         </a>
+        <a href="?page=submission" class="flex items-center gap-3 px-4 py-2 rounded-lg <?= $page == 'fonts' ? 'bg-neutral-800' : '' ?> hover:bg-neutral-700 transition">
+          <i data-lucide="bell-dot" class="w-4 h-4"></i>
+          <span class="sidebar-text">submission</span>
+        </a>
       </div>
     </aside>
 
@@ -282,6 +286,7 @@ $adminFonts = $conn->query("SELECT COUNT(*) FROM fonts f JOIN users u ON f.uploa
                 <th class="px-4 py-3 text-left">Category</th>
                 <th class="px-4 py-3 text-left">Uploader</th>
                 <th class="px-4 py-3 text-left">Uploaded At</th>
+                <th class="px-4 py-3 text-left">Status</th>
                 <th class="px-4 py-3 text-left">Actions</th>
               </tr>
             </thead>
@@ -294,6 +299,16 @@ $adminFonts = $conn->query("SELECT COUNT(*) FROM fonts f JOIN users u ON f.uploa
                   <td class="px-4 py-3 text-white/80"><?= htmlspecialchars($row['category_name']) ?></td>
                   <td class="px-4 py-3 text-white/50"><?= htmlspecialchars($row['username'] ?? '—') ?></td>
                   <td class="px-4 py-3 text-white/40"><?= date("d M Y", strtotime($row['created_at'])) ?></td>
+                  <td>
+                    <span class="inline-block px-2 py-0.5 rounded-full text-xs font-medium 
+          <?= $row['status'] === 'approved'
+                  ? 'bg-green-500/10 text-green-400 border border-green-400/30'
+                  : ($row['status'] === 'pending'
+                    ? 'bg-yellow-500/10 text-yellow-400 border border-yellow-400/30'
+                    : 'bg-red-500/10 text-red-400 border border-red-400/30') ?>">
+                      <?= htmlspecialchars($row['status']) ?>
+                    </span>
+                  </td>
                   <td class="px-4 py-3">
                     <div class="flex gap-2">
                       <a href="../addFont.php?edit=<?= $row['id'] ?>" class="text-blue-400 hover:underline text-sm">Edit</a>
@@ -631,6 +646,91 @@ $adminFonts = $conn->query("SELECT COUNT(*) FROM fonts f JOIN users u ON f.uploa
 
       <?php endif; ?>
 
+      <?php if ($page === 'submission'): ?>
+        <?php
+        if ($_SERVER["REQUEST_METHOD"] === "POST") {
+          $fontId = $_POST['font_id'];
+          $action = $_POST['action'];
+
+          if (in_array($action, ['approve', 'deny'])) {
+            $status = $action === 'approve' ? 'approved' : 'denied';
+            $stmt = $conn->prepare("UPDATE fonts SET status = ? WHERE id = ?");
+            $stmt->bind_param("si", $status, $fontId);
+            $stmt->execute();
+          }
+        }
+        ?>
+
+        <div class="mb-4 flex items-center justify-between gap-4">
+          <h2 class="text-xl font-semibold text-white">Font Submission Review</h2>
+        </div>
+
+        <div class="bg-[#1a1a1a] rounded-xl shadow overflow-y-auto max-h-[600px] border border-white/10">
+          <table class="min-w-full text-sm text-white">
+            <thead class="sticky top-0 z-10 bg-[#121212] text-xs uppercase tracking-wide text-white/60 border-b border-white/10">
+              <tr>
+                <th class="px-4 py-3 text-left">#</th>
+                <th class="px-4 py-3 text-left">Font Name</th>
+                <th class="px-4 py-3 text-left">Style</th>
+                <th class="px-4 py-3 text-left">License</th>
+                <th class="px-4 py-3 text-left">Uploaded By</th>
+                <th class="px-4 py-3 text-left">Status</th>
+                <th class="px-4 py-3 text-left">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <?php
+              $stmt = $conn->prepare("
+          SELECT fonts.id, font_name, style, license, status, users.full_name 
+          FROM fonts 
+          JOIN users ON fonts.uploaded_by = users.id 
+          WHERE status = 'pending'
+        ");
+              $stmt->execute();
+              $result = $stmt->get_result();
+              $i = 1;
+
+              while ($row = $result->fetch_assoc()):
+              ?>
+                <tr class="cursor-pointer border-b border-white/5 hover:bg-white/5 transition-all"
+                  onclick="handleRowClick(event, <?= $row['id'] ?>)">
+
+                  <td class="px-4 py-3 text-white/50"><?= $i++ ?></td>
+                  <td class="px-4 py-3 font-semibold"><?= htmlspecialchars($row['font_name']) ?></td>
+                  <td class="px-4 py-3"><?= htmlspecialchars($row['style']) ?></td>
+                  <td class="px-4 py-3"><?= htmlspecialchars($row['license']) ?></td>
+                  <td class="px-4 py-3 text-white/50"><?= htmlspecialchars($row['full_name']) ?></td>
+                  <td class="px-4 py-3">
+                    <span class="inline-block px-2 py-0.5 rounded-full text-xs font-medium 
+      <?= $row['status'] === 'pending'
+                  ? 'bg-yellow-500/10 text-yellow-400 border border-yellow-400/30'
+                  : ($row['status'] === 'approved'
+                    ? 'bg-green-500/10 text-green-400 border border-green-400/30'
+                    : 'bg-red-500/10 text-red-400 border border-red-400/30') ?>">
+                      <?= htmlspecialchars($row['status']) ?>
+                    </span>
+                  </td>
+                  <td class="px-4 py-3">
+                    <form method="post" action="" class="inline-flex gap-2">
+                      <input type="hidden" name="font_id" value="<?= $row['id'] ?>">
+                      <button name="action" value="approve" class="bg-green-500/10 hover:bg-green-500/20 text-green-400 border border-green-400/30 text-xs px-3 py-1 rounded">Approve</button>
+                      <button name="action" value="deny" class="bg-red-500/10 hover:bg-red-500/20 text-red-400 border border-red-400/30 text-xs px-3 py-1 rounded">Deny</button>
+                    </form>
+                  </td>
+                </tr>
+
+              <?php endwhile; ?>
+
+              <?php if ($result->num_rows === 0): ?>
+                <tr>
+                  <td colspan="7" class="text-center py-6 text-white/40">No pending submissions found</td>
+                </tr>
+              <?php endif; ?>
+            </tbody>
+          </table>
+        </div>
+      <?php endif; ?>
+
     </main>
   </div>
 
@@ -639,6 +739,20 @@ $adminFonts = $conn->query("SELECT COUNT(*) FROM fonts f JOIN users u ON f.uploa
   </footer>
 
   <script>
+    function handleRowClick(event, fontId) {
+      const target = event.target;
+
+      // Cegah buka detail jika klik tombol atau dalam form
+      if (target.closest("form") || target.tagName === "BUTTON") {
+        return;
+      }
+
+      // Kalau bukan tombol, buka detail
+      window.open('../detailFont.php?id=' + fontId, '_blank');
+    }
+
+
+
     lucide.createIcons();
 
     function toggleSidebar() {

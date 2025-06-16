@@ -13,21 +13,36 @@ $page = isset($_GET['page']) ? max(1, (int)$_GET['page']) : 1;
 $offset = ($page - 1) * $perPage;
 
 $conditions = [];
+
+// Filter WAJIB: hanya font yang sudah di-approve
+$conditions[] = "fonts.status = 'approved'";
+
+// Optional: search
 if ($search) {
   $conditions[] = "fonts.font_name LIKE '%$search%'";
 }
+
+// Optional: filter kategori
 if ($categoryFilter > 0) {
   $conditions[] = "fonts.category_id = $categoryFilter";
 }
-$searchCondition = count($conditions) ? "WHERE " . implode(" AND ", $conditions) : "";
 
+// Gabungkan kondisi
+$searchCondition = "WHERE " . implode(" AND ", $conditions);
+
+// Ambil semua kategori untuk dropdown
 $categoryResult = $conn->query("SELECT * FROM categories");
 
-$totalResult = $conn->query("SELECT COUNT(*) as total FROM fonts $searchCondition");
+// Hitung total data untuk pagination
+$totalResult = $conn->query("SELECT COUNT(*) as total FROM fonts 
+  JOIN categories ON fonts.category_id = categories.id 
+  $searchCondition");
 $totalFonts = $totalResult->fetch_assoc()['total'];
 $totalPages = ceil($totalFonts / $perPage);
 
-$sql = "SELECT fonts.*, categories.category_name FROM fonts 
+// Ambil data font yang sesuai kondisi
+$sql = "SELECT fonts.*, categories.category_name 
+        FROM fonts 
         JOIN categories ON fonts.category_id = categories.id 
         $searchCondition
         ORDER BY fonts.created_at DESC 
@@ -35,6 +50,7 @@ $sql = "SELECT fonts.*, categories.category_name FROM fonts
 
 $result = $conn->query($sql);
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 

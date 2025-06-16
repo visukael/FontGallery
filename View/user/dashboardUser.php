@@ -114,7 +114,6 @@ while ($row = $chartResult->fetch_assoc()) {
         <main class="flex-1 p-8 overflow-y-auto">
             <?php if ($page === 'dashboard'): ?>
 
-
                 <!-- Profile Card -->
                 <div class="bg-white/5 backdrop-blur-md rounded-2xl border border-white/10 shadow-xl p-6 flex flex-col sm:flex-row items-center gap-6 mb-12">
 
@@ -245,6 +244,7 @@ while ($row = $chartResult->fetch_assoc()) {
                                 <th class="px-4 py-3 text-left">Font Name</th>
                                 <th class="px-4 py-3 text-left">Category</th>
                                 <th class="px-4 py-3 text-left">Created At</th>
+                                <th class="px-4 py-3 text-left">Status</th>
                                 <th class="px-4 py-3 text-left">Actions</th>
                             </tr>
                         </thead>
@@ -257,6 +257,16 @@ while ($row = $chartResult->fetch_assoc()) {
                                     <td class="px-4 py-3 text-white/80"><?= htmlspecialchars($row['category_name']) ?></td>
                                     <td class="px-4 py-3 text-white/40"><?= date("d M Y", strtotime($row['created_at'])) ?></td>
                                     <td class="px-4 py-3">
+                                        <span class="inline-block px-2 py-0.5 rounded-full text-xs font-medium 
+        <?= $row['status'] === 'pending'
+                                    ? 'bg-yellow-500/10 text-yellow-400 border border-yellow-400/30'
+                                    : ($row['status'] === 'approved'
+                                        ? 'bg-green-500/10 text-green-400 border border-green-400/30'
+                                        : 'bg-red-500/10 text-red-400 border border-red-400/30') ?>">
+                                            <?= htmlspecialchars($row['status']) ?>
+                                        </span>
+                                    </td>
+                                    <td class="px-4 py-3">
                                         <div class="flex gap-2">
                                             <a href="../addFont.php?edit=<?= $row['id'] ?>" class="text-blue-400 hover:underline text-sm">Edit</a>
                                             <a href="../../Controller/processFont.php?action=delete&id=<?= $row['id'] ?>"
@@ -265,18 +275,17 @@ while ($row = $chartResult->fetch_assoc()) {
                                         </div>
                                     </td>
                                 </tr>
+
                             <?php endwhile ?>
                             <?php if ($fonts->num_rows === 0): ?>
                                 <tr>
-                                    <td colspan="5" class="text-center py-6 text-white/40">No fonts found</td>
+                                    <td colspan="6" class="text-center py-6 text-white/40">No fonts found</td>
                                 </tr>
                             <?php endif ?>
                         </tbody>
                     </table>
                 </div>
             <?php endif; ?>
-
-
 
 
 
@@ -410,7 +419,6 @@ while ($row = $chartResult->fetch_assoc()) {
                     </div>
 
                 </section>
-
             <?php endif; ?>
 
         </main>

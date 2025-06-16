@@ -129,16 +129,16 @@ echo "<style>@font-face { font-family: '$fontFamily'; src: url('$fontFilePath');
     <section class="grid grid-cols-1 md:grid-cols-2 gap-12">
       <div>
         <h2 class="text-2xl font-bold mb-4">About this Font</h2>
-        <p class="text-neutral-300 leading-relaxed"><?= nl2br(htmlspecialchars($font['description'])) ?></p>
+        <p class="text-neutral-300 leading-relaxed text-justify"><?= nl2br(htmlspecialchars($font['description'])) ?></p>
       </div>
       <div>
         <h2 class="text-2xl font-bold mb-4">License</h2>
-        <div class="bg-[#121212] p-6 rounded-2xl border border-white/10">
-          <p class="text-neutral-300 leading-relaxed"><?= htmlspecialchars($font['license']) ?>.</p>
-          <div class="mt-4">
-            <a href="#" class="text-blue-400 hover:underline text-sm">View full license</a>
-          </div>
+        <div class="bg-[#121212] p-6 rounded-2xl border border-white/10 min-h-[150px]">
+          <p class="text-neutral-300 leading-relaxed text-justify">
+            <?= htmlspecialchars($font['license']) ?>.
+          </p>
         </div>
+
       </div>
     </section>
 
